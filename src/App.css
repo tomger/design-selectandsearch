@@ -11,6 +11,19 @@
   border: 1px solid #ccc;
 }
 
+input[type="checkbox"] {
+  background: pink;
+  width: 32px;
+  height: 32px;
+}
+
+.list-item {
+  display: flex;
+  height: 32px;
+  align-items: center;
+  padding: 5px;
+}
+
 .App-header {
   background-color: #222;
   height: 150px;
