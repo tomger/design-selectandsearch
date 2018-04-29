@@ -5,10 +5,15 @@
 .inputbox {
   padding: 10px;
   border: 1px solid #ccc;
+  display: flex;
+  align-items: center;
+  border-radius: 3px;
 }
 
 .dropdown {
   border: 1px solid #ccc;
+  border-top: 0;
+  background: #fcfcfc;
 }
 
 input[type="checkbox"] {
@@ -17,11 +22,39 @@ input[type="checkbox"] {
   height: 32px;
 }
 
+.pill, .pill-many {
+  display: inline-block;
+  padding: 3px 6px;
+  border: 1px solid #ccc;
+  margin-right: 6px;
+  border-radius: 3px;
+  box-shadow: 0 1px 1px 0 #eee;
+}
+
+.inputbox-activities {
+  flex: 1;
+}
+
+.applyButton {
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  padding: 3px 6px;
+  cursor: pointer;
+}
+
+.list-header {
+  display: flex;
+  height: 32px;
+  align-items: center;
+  padding: 5px 10px;
+  font-weight: 600;
+}
+
 .list-item {
   display: flex;
   height: 32px;
   align-items: center;
-  padding: 5px;
+  padding: 5px 10px;
 }
 
 .App-header {
