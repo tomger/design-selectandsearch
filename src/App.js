@@ -12,7 +12,7 @@ const activities = ['Yoga', 'Pilates', 'Barre', 'Boxing', 'HIIT', 'Wellness']
 function formatSelection(array) {
   let elements;
   if (array.count() === 1) {
-    elements = array.get(0);
+    elements = (<input className="singleInput" defaultValue={array.get(0)} onChange={e => {}}/>);
 
   } else if (array.count() > 4) {
     elements = (<div className="pill-many">{array.count()} categories</div>);
@@ -30,7 +30,7 @@ class App extends Component {
     this.state = {
       selection: List(['Yoga']),
       lastMultiselection: List(),
-      dropdownVisible: true,
+      dropdownVisible: false,
       applyButtonVisible: false,
     }
   }
@@ -87,7 +87,7 @@ class App extends Component {
     let lastMultiSelection;
     if (this.state.selection.count() === 1 && !this.state.lastMultiselection.isSubset(this.state.selection)) {
       lastMultiSelection = [
-      <div className="list-header">Suggested</div>,
+      <div className="list-header">Recent</div>,
       <div className="list-item" onClick={this.onLastMultiselection}>
       {
         this.state.lastMultiselection.map(activity => (
