@@ -9,25 +9,12 @@ import { List } from 'immutable';
 
 
 const activities = ['Yoga', 'Pilates', 'Barre', 'Boxing', 'HIIT', 'Wellness']
-function formatSelection(array) {
-  let elements;
-  if (array.count() === 1) {
-    elements = (<input className="singleInput" defaultValue={array.get(0)} onChange={e => {}}/>);
-
-  } else if (array.count() > 4) {
-    elements = (<div className="pill-many">{array.count()} categories</div>);
-  } else {
-    elements = array.map(activity => (
-      <div key={activity} className="pill">{activity}</div>
-    ))
-  }
-  return elements;
-}
 
 class App extends Component {
   constructor () {
     super();
     this.state = {
+      query: undefined,
       selection: List(['Yoga']),
       lastMultiselection: List(),
       dropdownVisible: false,
@@ -63,6 +50,7 @@ class App extends Component {
     }
 
     this.setState({
+      query: undefined,
       selection: List([activity]),
       dropdownVisible: false,
     });
@@ -71,6 +59,7 @@ class App extends Component {
   onSelectActivity = (activity) => {
     let index = this.state.selection.findIndex(e => e === activity);
     this.setState({
+      query: undefined,
       applyButtonVisible: true,
       selection:
         this.state.selection.includes(activity) ?
@@ -96,10 +85,49 @@ class App extends Component {
       }</div>];
     }
 
+    let elements;
+    if (this.state.selection.count() === 1) {
+      elements = (<input className="singleInput" value={this.state.query !== undefined ? this.state.query : this.state.selection.get(0)} onChange={e => {
+        this.setState({
+          query: e.target.value,
+          // selection: this.state.selection.set(0, e.target.value),
+        })
+      }}/>);
+
+    } else if (this.state.selection.count() > 4) {
+      elements = (<div className="pill-many">{this.state.selection.count()} categories</div>);
+    } else {
+      elements = this.state.selection.map(activity => (
+        <div key={activity} className="pill">{activity}</div>
+      ))
+    }
+
+    let topcats = (
+      <div>
+        {lastMultiSelection}
+        <div className="list-header">Top Activities</div>
+        {
+          activities.map(v => (
+            <div className="list-item" key={v}>
+              <div
+                style={{flex:1, cursor: 'pointer'}}
+                onClick={(e) => this.onSingleSelectActivity(v)}>{v}</div>
+              <div className="checkboxContainer">
+                <input
+                  type="checkbox"
+                  checked={ this.state.selection.includes(v) }
+                  onChange={(e) => this.onSelectActivity(v)}/>
+              </div>
+            </div>
+          ))
+        }
+      </div>
+    );
+
     return (
       <div className="App">
         <div className="inputbox" onClick={this.onClick}>
-          <div className="inputbox-activities">{formatSelection(this.state.selection)}</div>
+          <div className="inputbox-activities">{elements}</div>
           <div className="applyButton"
             onClick={this.onClickApplyButton}
             style={{ display: this.state.applyButtonVisible ? 'block' : 'none' }}>
@@ -107,21 +135,13 @@ class App extends Component {
           </div>
         </div>
         <div className="dropdown" style={dropdownStyle}>
-          {lastMultiSelection}
-          <div className="list-header">Top Activities</div>
-          {
-            activities.map(v => (
-              <div className="list-item" key={v}>
-                <div
-                  style={{flex:1}}
-                  onClick={(e) => this.onSingleSelectActivity(v)}>{v}</div>
-                <input
-                  type="checkbox"
-                  checked={ this.state.selection.includes(v) }
-                  onChange={(e) => this.onSelectActivity(v)}/>
-              </div>
-            ))
-          }
+          {this.state.query ? (
+            <div>
+              <div className="list-header">Matched activities</div>
+              {
+                [0,1,2].map(e=><div className="list-item">{e}. {this.state.query}</div>)
+              }
+            </div>) : topcats}
         </div>
       </div>
     );
