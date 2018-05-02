@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 import { List } from 'immutable';
-
+import arrow from './chevron-right.svg'
+import magnify from './magnify.svg'
+import close from './close.svg'
 // free query
 // storing free query
 // toggling verticals
@@ -60,7 +62,7 @@ class App extends Component {
     let index = this.state.selection.findIndex(e => e === activity);
     this.setState({
       query: undefined,
-      applyButtonVisible: true,
+      applyButtonVisible: this.state.dropdownVisible,
       selection:
         this.state.selection.includes(activity) ?
           this.state.selection.delete(index) :
@@ -80,7 +82,7 @@ class App extends Component {
       <div className="list-item" onClick={this.onLastMultiselection}>
       {
         this.state.lastMultiselection.map(activity => (
-          <div key={activity} className="pill">{activity}</div>
+          <div key={activity}>{activity} + </div>
         ))
       }</div>];
     }
@@ -94,11 +96,12 @@ class App extends Component {
         })
       }}/>);
 
-    } else if (this.state.selection.count() > 4) {
+    } else if (this.state.selection.count() > 3) {
       elements = (<div className="pill-many">{this.state.selection.count()} categories</div>);
     } else {
       elements = this.state.selection.map(activity => (
-        <div key={activity} className="pill">{activity}</div>
+        <div key={activity} className="pill">{activity}
+        <span onClick={e=> {e.stopPropagation(); this.onSelectActivity(activity) }}><img className="closeButton" src={close}/></span></div>
       ))
     }
 
@@ -109,14 +112,22 @@ class App extends Component {
         {
           activities.map(v => (
             <div className="list-item" key={v}>
+            <div
+              onClick={(e) => this.onSelectActivity(v)}
+              style={{flex:1, cursor: 'pointer', padding: '4px 0'}}>
+              <span className="checkboxContainer">
+              <input
+              type="checkbox"
+              onChange={(e) => this.onSelectActivity(v)}
+              checked={ this.state.selection.includes(v) }
+              />
+              </span>
+              <span>{v}</span>
+              </div>
               <div
-                style={{flex:1, cursor: 'pointer'}}
-                onClick={(e) => this.onSingleSelectActivity(v)}>{v}</div>
-              <div className="checkboxContainer">
-                <input
-                  type="checkbox"
-                  checked={ this.state.selection.includes(v) }
-                  onChange={(e) => this.onSelectActivity(v)}/>
+                onClick={(e) => this.onSingleSelectActivity(v)}
+                style={{width: 32, height: 32, cursor: 'pointer'}}>
+                <img src={arrow}/>
               </div>
             </div>
           ))
@@ -127,11 +138,12 @@ class App extends Component {
     return (
       <div className="App">
         <div className="inputbox" onClick={this.onClick}>
+          <img src={magnify} style={{marginRight: 5}}/>
           <div className="inputbox-activities">{elements}</div>
           <div className="applyButton"
             onClick={this.onClickApplyButton}
             style={{ display: this.state.applyButtonVisible ? 'block' : 'none' }}>
-            Apply filters
+            Done
           </div>
         </div>
         <div className="dropdown" style={dropdownStyle}>
@@ -139,7 +151,9 @@ class App extends Component {
             <div>
               <div className="list-header">Matched activities</div>
               {
-                [0,1,2].map(e=><div className="list-item">{e}. {this.state.query}</div>)
+                [0].map(e=><div className="list-item" onClick={e=> {
+                  this.onSingleSelectActivity(this.state.query)
+                }}>{this.state.query}</div>)
               }
             </div>) : topcats}
         </div>

@@ -10,9 +10,7 @@
 }
 
 .checkboxContainer {
-  width: 32px;
-  border-left: 1px solid #ccc;
-  padding-left: 12px;
+  padding-right: 8px;
 }
 
 .inputbox {
@@ -52,12 +50,19 @@ input[type="checkbox"] {
 }
 
 .applyButton {
-  border: 1px solid #ccc;
+  /*border: 1px solid #ccc;*/
+  /*background: #333;*/
+  color: #0033ff;
   border-radius: 3px;
   padding: 3px 6px;
   cursor: pointer;
 }
-
+.closeButton {
+  width: 15px;
+  top: 2px;
+  left: 2px;
+  position: relative;
+}
 .list-header {
   display: flex;
   height: 32px;
@@ -70,7 +75,7 @@ input[type="checkbox"] {
   display: flex;
   height: 32px;
   align-items: center;
-  padding: 4px 10px;
+  padding: 4px 4px 4px 10px;
 }
 
 .App-header {
